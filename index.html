@@ -1,0 +1,28 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Jogo da Velha (mínimo)</title>
+<style>
+  body{font-family:system-ui,Arial;margin:20px;display:grid;place-items:center}
+  .board{display:grid;grid-template-columns:repeat(3,80px);gap:6px}
+  button{width:80px;height:85px;font-size:16px;cursor:pointer}
+  #s{margin:12px 0;text-align:center;font-weight:700}
+</style>
+<div id="s">Vez: X</div>
+<div class="board" id="b"></div>
+<button id="r">Reiniciar</button>
+<script>
+  const b = document.getElementById('b'), s = document.getElementById('s'), r = document.getElementById('r');
+  const W = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  let a, p, m, end;
+  function start(){ a = Array(9).fill(''); p='X'; m=0; end=false; render(); s.textContent='Vez: '+p; }
+  function render(){ b.innerHTML=''; a.forEach((v,i)=>{ let c=document.createElement('button'); c.textContent=v; c.disabled=v||end; c.onclick=()=>play(i); b.appendChild(c); }); }
+  function win(x){ return W.some(t=>t.every(i=>a[i]===x)); }
+  function play(i){
+    if(end||a[i]) return;
+    a[i]=p; m++; render();
+    if(win(p)){ s.textContent='Venceu: '+p; end=true; return; }
+    if(m===9){ s.textContent='Empate'; end=true; return; }
+    p = p==='X' ? 'O' : 'X'; s.textContent='Vez: '+p;
+  }
+  r.onclick=start; start();
+</script>
